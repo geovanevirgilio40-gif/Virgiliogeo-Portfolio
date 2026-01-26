@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>LuisãoIA.com</title>
+ <style>
+  body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: pink;
+}
+
+.login-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  background: rgba(255,255,255,0.5);
+  width: 320px;
+  height:300px;
+  margin-left:20px;
+  margin-top:90px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+  .login-container input {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.login-container button {
+  width: 100px;
+  padding: 10px;
+  background: #1f4fa3;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius:20px;
+}
+
+.login-container button:hover {
+  background: #163b7a;
+}
+
+.erro {
+  color: red;
+  font-size: 14px;
+}
+
+  </style>
+</head>
+<body>
+   <h1 style="color:white;text-align:center;">LuisãoIA</h1>
+ 
+  <div class="login-container">
+            <br>
+      <h2 style="color:white">Login</h2>
+   
+    <input type="email" id="email" placeholder="Email do utilizador">
+    <input type="password" id="senha" placeholder="Senha">
+
+    <button class="btn" onclick="login()">Entrar</button>
+
+      <p id="erro" class="erro"></p>
+ 
+    <p style="font-size:10px;">© 2026 - Sistema Interno | Todos os direitos reservados. </p>
+   
+  </div>
+
+  <script src="scritp/login.js"></script>
+</body>
+</html>
