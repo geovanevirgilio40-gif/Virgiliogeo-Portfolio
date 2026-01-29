@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>painel | Sistema de Apoio à Identificação</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <img class="logo" src="assent/logo.png">
+    <h2>Sistema de Apoio à Identificação</h2>
+    <div class="user-info">
+      👤Agente Silva| <a href="#">⚙️Configuração</a>| <a href="index.html">Sair</a>
+    </div>
+  </header>
+
+  <!-- Conteúdo -->
+  <main class="container">
+
+    <!-- Pesquisa -->
+    <section class="search-section">
+      <h3>Consulta Cidadão</h3> <input type="text" id="bi" placeholder="BI...">
+      <button onclick="pesquisar()">Pesquisar</button>
+    </section>
+
+    <!-- Dados do cidadão -->
+    <section id="dados" class="card" style="display:none;">
+      <h3>Dados do Cidadão</h3>
+      <p><strong>Nome:</strong> João Manuel Pereira</p>
+      <p><strong>BI:</strong> 002345678LA040</p>
+      <p><strong>Data de Nascimento:</strong> 15/03/1985</p>
+      <p><strong>Sexo:</strong> M</p>     
+      <p><strong>Telefone:</strong> 923 456 789</p>     
+    </section>
+
+    <!-- Histórico -->
+    <section id="historico" class="card" style="display:none;">
+      <h3>Portador de:</h3>
+      <div class="btn_c">
+        <button class="btn0">Carta de Conducão</button>
+        <button class="btn0">Cartão Municipe</button>
+        <button class="btn0">Declarações</button>
+        <button class="btn0">Titulo de Propriedade</button>
+        <button class="btn0">Carta de Conducão</button>
+        <button class="btn0">Carta de Conducão</button>
+      </div>
+    </section>
+    
+  </main>
+  
+  <footer>
+        <p class="ultimo" style="font-size:10px;">© 2026 - Sistema Interno </p>
+  </footer>
+
+  <script src="js/painel.js"></script>
+</body>
+</html>
