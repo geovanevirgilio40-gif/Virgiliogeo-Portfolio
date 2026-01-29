@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LuisãoIA.com</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body{ 
+  background: linear-gradient(135deg, #ff66b2, #ff99cc); 
+  color:#fff; 
+  min-height:100vh; 
+  display:flex; 
+  flex-direction:column; 
+  overflow-x:hidden;
+}
+
+/* TOPO */
+.header{ 
+  height:60px; 
+  display:flex; 
+  align-items:center; 
+  justify-content:space-between; 
+  border-bottom:1px solid rgba(0,0,0,0.1); 
+  padding:0 15px;
+}
+
+.b1{ 
+  background:black; 
+  border:none; 
+  color:white; 
+  width:40px; 
+  height:40px; 
+  border-radius:50%; 
+  cursor:pointer; 
+  font-size:18px; 
+}
+
+.b2{ 
+  background:black; 
+  border:none; 
+  color:white; 
+  height:40px; 
+  border-radius:20px; 
+  cursor:pointer; 
+  padding:0 15px;
+}
+
+.t1{
+  flex:1;
+  text-align:center;
+}
+
+/* MENU */
+
+  
+  .opção{
+  position:absolute;
+  top:60px;
+  left:10px;
+  background:white;
+  border-radius:12px;
+  padding:10px;
+  display:none;   /* começa escondido */
+  gap:8px;
+  width:220px;
+  z-index:1000;
+}
+
+.op{
+  background:white;
+  color:purple;
+  font-size:16px;
+  border:1px solid transparent;
+  height:35px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.op:hover{
+  background:purple;
+  color:white;
+  border:1px solid white;
+}
+
+/* ÁREA PRINCIPAL */
+.main{ 
+  flex:1; 
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  justify-content:center; 
+  text-align:center; 
+  padding:20px;
+}
+
+.logo{
+  font-size:50px;
+  margin-bottom:15px;
+}
+
+.main h1{
+  font-size:22px;
+}
+
+.main p{
+  font-size:14px;
+  opacity:0.9;
+}
+
+/* CHAT */
+.chat-mensagens{
+  width:100%;
+  max-width:800px;
+  margin-top:20px;
+}
+
+.msg{
+  background:rgba(255,255,255,0.2);
+  padding:12px;
+  border-radius:12px;
+  margin-bottom:10px;
+  text-align:left;
+}
+
+/* INPUT */
+.footer{
+  padding:20px;
+  border-top:1px solid rgba(0,0,0,0.1);
+}
+
+.input-box{ 
+  background:white; 
+  border-radius:30px; 
+  display:flex; 
+  align-items:center; 
+  padding:10px 15px; 
+  max-width:800px;
+  margin:auto;
+}
+
+.input-box input{ 
+  flex:1; 
+  border:none; 
+  outline:none; 
+  font-size:15px;
+}
+
+.input-box button{ 
+  background:black; 
+  border:none; 
+  color:white; 
+  width:40px; 
+  height:40px; 
+  border-radius:50%; 
+  cursor:pointer; 
+  font-size:18px;
+}
+
+.input-box button:hover{
+  background:#333;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <button class="b1" id="btnMenu">&#9776;</button>
+  <h2 class="t1">LuisãoIA</h2>
+  <button class="b2">Novo chat</button>
+</div>
+
+<div class="opção" id="menu" hidden>
+  <button class="op">CONTA 👤</button>
+  <button class="op">MENSAGEM ✉️</button>
+  <button class="op">HISTÓRICO 🗑️</button>
+  <a href="index.html"><button class="op">Sair</button> </a>
+</div> 
+  
+<div class="main">
+  <div class="logo">LS</div>
+  <h1>Olá, sou o LuisãoIA.</h1>
+  <p>Como posso ajudar hoje?</p>
+
+  <div class="chat-mensagens" id="chat"></div>
+</div>
+
+<div class="footer">
+  <div class="input-box">
+    <input type="text" id="mensagem" placeholder="Enviar mensagem para LuisãoIA">
+    <button onclick="enviar()">➤</button>
+  </div>
+</div>
+
+<script>
+function enviar(){
+  const input = document.getElementById("mensagem");
+  const chat = document.getElementById("chat");
+
+  if(input.value.trim() === "") return;
+
+  // mensagem do usuário
+  chat.innerHTML += `<div class="msg"><strong>Você:</strong> ${input.value}</div>`;
+
+  // resposta fake da IA
+  setTimeout(() => {
+    chat.innerHTML += `<div class="msg"><strong>LuisãoIA:</strong> Estou a aprender ainda 😅 mas já recebi a tua mensagem!</div>`;
+    chat.scrollTop = chat.scrollHeight;
+  }, 500);
+
+  input.value = "";
+}
+const btnMenu = document.getElementById("btnMenu");
+const menu = document.getElementById("menu");
+
+btnMenu.addEventListener("click", () => {
+  menu.style.display =
+    menu.style.display === "grid" ? "none" : "grid";
+});
+
+</script>
+
+</body>
+</html>

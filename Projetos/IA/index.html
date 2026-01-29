@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>LuisãoIA.com</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ff66b2, #ff99cc);
+}
+
+h1{
+  color:white;
+  text-align:center;
+  margin-top:30px;
+}
+
+.login-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px);
+}
+
+.login-container {
+  background: rgba(255,255,255,0.5);
+  width: 320px;
+  height:300px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+  border-radius:15px;
+}
+
+.login-container input {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius:8px;
+  border:none;
+}
+
+.login-container button {
+  width: 100px;
+  padding: 10px;
+  background: #1f4fa3;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius:20px;
+}
+
+.login-container button:hover {
+  background: #163b7a;
+}
+
+.erro {
+  color: red;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>LuisãoIA</h1>
+
+<div class="login-body">
+  <div class="login-container">
+    <br>
+    <h2 style="color:white">Login</h2>
+
+    <input type="email" id="email" placeholder="Email do utilizador">
+    <input type="password" id="senha" placeholder="Senha">
+
+    <button onclick="login()">Entrar</button>
+
+    <p id="erro" class="erro"></p>
+
+    <p style="font-size:10px;">
+      © 2026 - Sistema Interno | Todos os direitos reservados.
+    </p>
+  </div>
+</div>
+
+<script>
+function login(){
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
+  const erro = document.getElementById("erro");
+
+  if(email === "" || senha === ""){
+    erro.textContent = "Preencha todos os campos!";
+    return;
+  }
+
+  // Login fake (exemplo)
+  if(email === "geo" && senha === "123"){
+    alert("Login feito com sucesso!");
+    window.location.href = "painel.html";
+  }else{
+    erro.textContent = "Email ou senha incorretos!";
+  }
+}
+</script>
+
+</body>
+</html>
