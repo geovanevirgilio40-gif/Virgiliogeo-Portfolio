@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Arrendamento</title>
+<style>
+:root {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --text: #111;
+  --accent: #3b82f6;
+  --danger: #ef4444;
+  --success: #10b981;
+}
+body.dark {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --accent: #60a5fa;
+  --danger: #f87171;
+  --success: #34d399;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+.container {
+  max-width: 420px;
+  width: 100%;
+  background: var(--card);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-top: 40px;
+}
+h2 { text-align: center; margin-bottom: 10px; }
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+}
+button {
+  width: 100%;
+  padding: 10px;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 5px 0;
+}
+button:hover { opacity: 0.9; }
+.btn-danger {
+  background: var(--danger);
+}
+.btn-success {
+  background: var(--success);
+}
+.link {
+  text-align: center;
+  margin-top: 10px;
+  color: var(--accent);
+  cursor: pointer;
+}
+#toggleMode {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 8px;
+  border-radius: 100%;
+  cursor: pointer;
+}
+.hidden { display: none; }
+
+/* Casa cards */
+.house-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+.house-card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  position: relative;
+}
+.house-card img {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Admin badge */
+.admin-badge {
+  display: inline-block;
+  background: var(--success);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 5px;
+}
+
+/* Admin panel */
+.admin-panel {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background: var(--bg);
+}
+.user-list {
+  margin-top: 10px;
+}
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+</style>
+</head>
+<body>
+<button id="toggleMode">🌙</button>
+   
+<div align="center" class="container" id="startPage">
+  <hr>
+  <h1>Bem-vindo<br> ao melhor site de arrendamento de casas!</h1>
+  <hr>
+  <br>
+    
+  <img src="666.jpg" alt="" width="378" height="250">
+  <br>
+  <br>
+  <br>
+
+  <button id="btnRegister">Cadastrar</button>
+  <br><br>
+  <button id="btnLogin">Já tenho conta</button>
+</div>
+ 
+<div class="container hidden" id="registerPage"> 
+  <h2>Cadastrar Usuário</h2>
+  <input id="rName" placeholder="Nome completo" required>
+  <input id="rPhone" placeholder="Número de telefone" required>
+  <input id="rEmail" type="email" placeholder="Email" required>
+  <input id="rPass" type="password" placeholder="Password" required>
+  <br>
+  <button id="registerBtn">Confirmar Cadastro</button>
+  <div class="link" onclick="showPage('startPage')">Voltar</div>
+</div>
+
+<div class="container hidden" id="loginPage">
+  <h2>Entrar</h2>
+  <input id="lPhone" placeholder="Número de telefone" required>
+  <input id="lPass" type="password" placeholder="Password" required>
+  <button id="loginBtn">Entrar</button>
+  <div class="link" onclick="showPage('recoverPage')">Esqueceu a password?</div>
+  <div class="link" onclick="showPage('startPage')">Voltar</div>
+</div>
+
+<div class="container hidden" id="recoverPage">
+  <h2>Recuperar Senha</h2>
+  <input id="recPhone" placeholder="Digite o número de telefone">
+  <input id="newPass" type="password" placeholder="Nova senha">
+  <button id="recoverBtn">Atualizar senha</button>
+  <div class="link" onclick="showPage('loginPage')">Voltar</div>
+</div>
+
+<div class="container hidden" id="menuPage">
+  <h2>O que pretendes!?</h2>
+  <br>
+  <br>
+  <br>
+      
+  <!-- A imagem que vai mudar -->
+  <img id="imagem" src="00.jpg" width="385" height="250">
+  <br>
+  <br>
+  <br>
+  <br>
+
+  <button id="btnRent">Arrendar sua casa</button>
+  <button id="btnSearch">Procurar uma casa</button>
+  <button id="btnAdmin">Painel de Administração</button>
+  <div class="link" onclick="logout()">Sair</div>
+</div>
+
+<div class="container hidden" id="rentPage">
+  <h2>Arrendar Casa</h2>
+  <input id="title" placeholder="Título da casa">
+  <input id="rooms" type="number" placeholder="Quartos">
+  <input id="living" type="number" placeholder="Salas">
+  <input id="kitchen" type="number" placeholder="Cozinhas">
+  
+  <select id="electricity">
+    <option value="false">Sem energia elétrica</option>
+    <option value="true">Com energia elétrica</option>
+  </select>
+  
+  <select id="yard">
+    <option value="false">Sem quintal</option>
+    <option value="true">Com quintal</option>
+  </select>
+  <input id="price" placeholder="Preço Kz/mês">
+  <textarea id="desc" placeholder="Descrição"></textarea>
+  <input id="photos" type="file" multiple accept="image/*">
+  <button id="saveHouse">Salvar Casa</button>
+  <div class="link" onclick="showPage('menuPage')">Voltar</div>
+</div>
+
+<div class="container hidden" id="searchPage">
+  <h2>Casas Disponíveis</h2>
+  <input id="searchInput" placeholder="Pesquise por título, preço, quartos...">
+  <div id="houseList" class="house-list"></div>
+  <div class="link" onclick="showPage('menuPage')">Voltar</div>
+</div>
+
+<div class="container hidden" id="adminPage">
+  <h2>Painel de Administração</h2>
+  
+  <div class="admin-panel">
+    <h3>Gerenciar Usuários</h3>
+    <div id="userList" class="user-list"></div>
+  </div>
+  
+  <div class="link" onclick="showPage('menuPage')">Voltar</div>
+</div>
+
+<script>
+const STORAGE_USERS = "users_db";
+const STORAGE_HOUSES = "houses_db";
+let currentUser = null;
+
+// Alternar modo claro/escuro
+const modeBtn = document.getElementById('toggleMode');
+modeBtn.onclick = () => {
+  document.body.classList.toggle('dark');
+  modeBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+};
+
+// Mostrar páginas
+function showPage(id) {
+  document.querySelectorAll('.container').forEach(div => div.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  
+  // Se for a página de pesquisa, renderizar as casas
+  if (id === 'searchPage') {
+    renderHouses();
+  }
+  
+  // Se for a página do menu, iniciar o slideshow
+  if (id === 'menuPage') {
+    startSlideshow();
+    updateMenuButtons();
+  }
+  
+  // Se for a página de admin, carregar lista de usuários
+  if (id === 'adminPage') {
+    loadUserList();
+  }
+  
+  // Verificar acesso à página de cadastro de casas
+  if (id === 'rentPage' && (!currentUser || !currentUser.isAdmin)) {
+    alert("Apenas administradores podem cadastrar casas!");
+    showPage('menuPage');
+    return;
+  }
+}
+
+// Atualizar botões do menu baseado no tipo de usuário
+function updateMenuButtons() {
+  const btnRent = document.getElementById('btnRent');
+  const btnAdmin = document.getElementById('btnAdmin');
+  
+  if (currentUser && currentUser.isAdmin) {
+    btnRent.style.display = 'block';
+    btnAdmin.style.display = 'block';
+  } else {
+    btnRent.style.display = 'none';
+    btnAdmin.style.display = 'none';
+  }
+}
+
+// Iniciar slideshow de imagens
+function startSlideshow() {
+  const imagens = ["00.jpg", "1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"]; 
+  let index = 0;
+
+  function trocarImagem() {
+    index = (index + 1) % imagens.length;
+    document.getElementById("imagem").src = imagens[index];
+  }
+
+  // Troca a cada 2 segundos (2000 milissegundos)
+  setInterval(trocarImagem, 2000);
+}
+
+// Carregar dados
+function load(key) {
+  return JSON.parse(localStorage.getItem(key) || "[]");
+}
+
+function save(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+// Inicializar admin padrão se não existir
+function initializeDefaultAdmin() {
+  const users = load(STORAGE_USERS);
+  const adminExists = users.some(user => user.isAdmin);
+  
+  if (!adminExists) {
+    users.push({
+      name: "Administrador",
+      phone: "admin",
+      email: "admin@admin.com",
+      pass: "admin123",
+      isAdmin: true
+    });
+    save(STORAGE_USERS, users);
+    console.log("Admin padrão criado: Telefone: admin, Senha: admin123");
+  }
+}
+
+// Cadastro
+document.getElementById('registerBtn').onclick = () => {
+  const name = document.getElementById('rName').value.trim();
+  const phone = document.getElementById('rPhone').value.trim();
+  const email = document.getElementById('rEmail').value.trim();
+  const pass = document.getElementById('rPass').value.trim();
+  
+  if (!name || !phone || !pass) return alert("Preencha todos os campos!");
+  
+  const users = load(STORAGE_USERS);
+  if (users.find(u => u.phone === phone)) return alert("Número já cadastrado!");
+  
+  // Por padrão, novos usuários não são administradores
+  users.push({ name, phone, email, pass, isAdmin: false });
+  save(STORAGE_USERS, users);
+  alert("Cadastro confirmado!");
+  showPage('startPage');
+};
+
+// Login
+document.getElementById('loginBtn').onclick = () => {
+  const phone = document.getElementById('lPhone').value.trim();
+  const pass = document.getElementById('lPass').value.trim();
+  
+  const users = load(STORAGE_USERS);
+  const user = users.find(u => u.phone === phone && u.pass === pass);
+  if (!user) return alert("Conta não existe ou senha errada!");
+  
+  currentUser = user;
+  alert(`Bem-vindo de volta, ${user.name}!`);
+  showPage('menuPage');
+};
+
+// Recuperar senha
+document.getElementById('recoverBtn').onclick = () => {
+  const phone = document.getElementById('recPhone').value.trim();
+  const newP = document.getElementById('newPass').value.trim();
+  
+  if (!phone || !newP) return alert("Preencha todos os campos!");
+  
+  const users = load(STORAGE_USERS);
+  const user = users.find(u => u.phone === phone);
+  if (!user) return alert("Número não encontrado!");
+  
+  user.pass = newP;
+  save(STORAGE_USERS, users);
+  alert("Senha atualizada com sucesso!");
+  showPage('loginPage');
+};
+
+// Arrendar casa (apenas para administradores)
+document.getElementById('saveHouse').onclick = async () => {
+  if (!currentUser || !currentUser.isAdmin) return alert("Apenas administradores podem cadastrar casas!");
+  
+  const title = document.getElementById('title').value.trim() || "Sem título";
+  const rooms = document.getElementById('rooms').value || 0;
+  const living = document.getElementById('living').value || 0;
+  const kitchen = document.getElementById('kitchen').value || 0;
+  const electricity = document.getElementById('electricity').value === "true";
+  const yard = document.getElementById('yard').value === "true";
+  const price = document.getElementById('price').value.trim();
+  const desc = document.getElementById('desc').value.trim();
+  const files = [...document.getElementById('photos').files].slice(0, 5);
+  
+  if (!title || !price) return alert("Preencha pelo menos o título e o preço!");
+  
+  const photosData = await Promise.all(files.map(f => toBase64(f)));
+  const houses = load(STORAGE_HOUSES);
+  
+  houses.push({ 
+    id: Date.now(), 
+    user: currentUser.phone, 
+    title, 
+    rooms, 
+    living, 
+    kitchen, 
+    electricity,
+    yard, 
+    price, 
+    desc, 
+    photos: photosData 
+  });
+  
+  save(STORAGE_HOUSES, houses);
+  alert("Casa cadastrada com sucesso!");
+  showPage('menuPage');
+};
+
+function toBase64(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+// Mostrar casas
+function renderHouses(filter = "") {
+  const houses = load(STORAGE_HOUSES);
+  const list = document.getElementById('houseList');
+  list.innerHTML = "";
+  
+  const filtered = houses.filter(h =>
+    h.title.toLowerCase().includes(filter.toLowerCase()) ||
+    String(h.price).toLowerCase().includes(filter.toLowerCase()) ||
+    h.desc.toLowerCase().includes(filter.toLowerCase())
+  );
+  
+  if (!filtered.length) {
+    list.innerHTML = "<p>Nenhuma casa encontrada.</p>";
+    return;
+  }
+  
+  filtered.forEach(h => {
+    const div = document.createElement('div');
+    div.className = "house-card";
+    
+    // Verificar se o usuário atual é admin para mostrar botão de exclusão
+    const deleteButton = currentUser && currentUser.isAdmin 
+      ? `<button class="delete-btn" onclick="deleteHouse(${h.id})">×</button>`
+      : "";
+    
+    div.innerHTML = `
+      ${deleteButton}
+      <img src="${h.photos[0] || 'placeholder.jpg'}" alt="foto">
+      <h4>${h.title}</h4>
+      <p>Quartos: ${h.rooms}</p>
+      <p>Salas: ${h.living}</p>
+      <p>Cozinhas: ${h.kitchen}</p>
+      <p>Energia: ${h.electricity ? 'Sim' : 'Não'}</p>
+      <p>Quintal: ${h.yard ? 'Sim' : 'Não'}</p>
+      <p><strong>${h.price} Kz/mês</strong></p>
+      <p>${h.desc || 'Sem descrição'}</p>
+    `;
+    list.appendChild(div);
+  });
+}
+
+// Excluir casa (apenas para administradores)
+function deleteHouse(houseId) {
+  if (!currentUser || !currentUser.isAdmin) {
+    alert("Apenas administradores podem excluir casas!");
+    return;
+  }
+  
+  if (!confirm("Tem certeza que deseja excluir esta casa?")) return;
+  
+  const houses = load(STORAGE_HOUSES);
+  const updatedHouses = houses.filter(h => h.id !== houseId);
+  save(STORAGE_HOUSES, updatedHouses);
+  
+  alert("Casa excluída com sucesso!");
+  renderHouses();
+}
+
+// Carregar lista de usuários para o painel de administração
+function loadUserList() {
+  if (!currentUser || !currentUser.isAdmin) {
+    alert("Acesso negado!");
+    showPage('menuPage');
+    return;
+  }
+  
+  const users = load(STORAGE_USERS);
+  const userList = document.getElementById('userList');
+  userList.innerHTML = "";
+  
+  users.forEach(user => {
+    // Não permitir que o admin atual se remova
+    if (user.phone === currentUser.phone) return;
+    
+    const userItem = document.createElement('div');
+    userItem.className = 'user-item';
+    
+    userItem.innerHTML = `
+      <div>
+        ${user.name} (${user.phone})
+        ${user.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}
+      </div>
+      <div>
+        ${user.isAdmin 
+          ? `<button class="btn-danger" onclick="removeAdmin('${user.phone}')">Remover Admin</button>`
+          : `<button class="btn-success" onclick="makeAdmin('${user.phone}')">Tornar Admin</button>`
+        }
+      </div>
+    `;
+    
+    userList.appendChild(userItem);
+  });
+}
+
+// Tornar usuário administrador
+function makeAdmin(userPhone) {
+  if (!currentUser || !currentUser.isAdmin) return;
+  
+  const users = load(STORAGE_USERS);
+  const user = users.find(u => u.phone === userPhone);
+  
+  if (user) {
+    user.isAdmin = true;
+    save(STORAGE_USERS, users);
+    alert(`${user.name} agora é um administrador!`);
+    loadUserList();
+  }
+}
+
+// Remover privilégios de administrador
+function removeAdmin(userPhone) {
+  if (!currentUser || !currentUser.isAdmin) return;
+  
+  const users = load(STORAGE_USERS);
+  const user = users.find(u => u.phone === userPhone);
+  
+  if (user) {
+    user.isAdmin = false;
+    save(STORAGE_USERS, users);
+    alert(`${user.name} não é mais um administrador!`);
+    loadUserList();
+  }
+}
+
+// Event listeners para pesquisa
+document.getElementById('searchInput').addEventListener('input', e => {
+  renderHouses(e.target.value);
+});
+
+// Botões principais
+document.getElementById('btnRegister').onclick = () => showPage('registerPage');
+document.getElementById('btnLogin').onclick = () => showPage('loginPage');
+document.getElementById('btnRent').onclick = () => showPage('rentPage');
+document.getElementById('btnSearch').onclick = () => showPage('searchPage');
+document.getElementById('btnAdmin').onclick = () => showPage('adminPage');
+
+function logout() {
+  currentUser = null;
+  showPage('startPage');
+}
+
+// Inicializar o sistema
+initializeDefaultAdmin();
+</script>
+</body>
+</html>
