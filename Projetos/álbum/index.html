@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Álbum da Apresentação</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  :root {
+    --gold: #D4AF37;
+    --brown: #8B4513;
+    --cream: #FFF8DC;
+    --white: #FFFFFF;
+  }
+
+  body {
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.1) 2px, transparent 2px),
+      radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.1) 2px, transparent 2px),
+      var(--cream);
+    background-size: 200px 200px;
+    min-height: 100vh;
+  }
+
+  /* ALBUM STYLES */
+  .album-page {
+    display: block; /* Alterado de none para block */
+  }
+
+  .t1{
+    font-size:25px;
+    position:absolute;
+    top:5px;
+    left:10px;
+    
+  }
+    .t2{
+    font-size:16px;
+    position:absolute;
+    top:30px;
+    left:15px;
+  }
+  
+  .header-bar {
+    width: 100%;
+    height:100px;
+    position: fixed;
+    background: linear-gradient(45deg, var(--gold), var(--brown));
+    color: var(--white);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items:inline;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+   
+  }
+
+  .menu-hidden {      
+    display: flex;
+    flex-direction:row;
+    gap:10px; 
+    margin-top:120px;    
+    position: fixed;   
+    padding: px;
+    background:rgba(250,250,250,0.5);
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 1001;
+    min-width: 150px;
+  }
+
+  .menu-option {
+    width:100px;
+    height:30px;    
+    padding: 5px;
+    background: var(--cream);
+    border: 1px solid var(--gold);
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px ;
+    transition: all 0.3s ease;
+    color: var(--brown);
+    text-align: center;
+  }
+
+  .menu-option:hover {
+    background: var(--gold);
+    color: white;
+  }
+
+  .logout-btn {
+    background: var(--white);
+    color: var(--brown);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;    
+    font-size:16px;
+    position:absolute;
+    top:55px;
+    left:15px;
+  }
+
+  .album-content {
+    padding-top: 80px;
+  }
+
+  .album-title {
+    text-align: center;
+    color: #8B4513;
+    font-size: 3rem;
+    margin: 2rem 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Georgia', serif;
+  }
+
+  .album-subtitle {
+    text-align: center;
+    color: #D4AF37;
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    font-style: italic;
+  }
+
+  .family-album {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .photo-card {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.3s;
+    background: white;
+    border: 1px solid #f0f0f0;
+  }
+
+  .photo-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  }
+
+  .photo-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    cursor: zoom-in;
+  }
+
+  .photo-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.9));
+    color: white;
+    padding: 2rem 1rem 1rem;
+    transform: translateY(100%);
+    transition: transform 0.3s;
+  }
+
+  .photo-card:hover .photo-info {
+    transform: translateY(0);
+  }
+
+  /* VIDEO GALLERY */
+  .video-section {
+    display: none; /* Inicialmente escondido */
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .video-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .video-item {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    position: relative;
+    height: 300px; /* Altura fixa para consistência */
+  }
+
+  .video-item video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover; /* Ocupa toda a área sem distorcer */
+  }
+
+  /* MODAL ZOOM */
+  .zoom-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .zoom-image {
+    display: block;
+    margin: auto;
+    max-width: 95%;
+    max-height: 85%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+    cursor: zoom-out;
+  }
+
+  .zoom-close {
+    position: absolute;
+    top: 25px;
+    right: 40px;
+    color: white;
+    font-size: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10000;
+    transition: all 0.3s ease;
+    background: rgba(0,0,0,0.5);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--gold);
+  }
+
+  .zoom-close:hover {
+    color: var(--gold);
+    background: rgba(255,255,255,0.1);
+    transform: scale(1.1);
+  }
+
+  .zoom-info {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px 40px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--gold);
+    max-width: 80%;
+  }
+
+  /* ANIMAÇÕES */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes zoomIn {
+    from {
+      transform: translate(-50%, -50%) scale(0.5);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .zoom-animate {
+    animation: zoomIn 0.4s ease-out;
+  }
+
+  /* RESPONSIVIDADE */
+  @media (max-width: 768px) {
+    .family-album {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+    
+    .video-gallery {
+      grid-template-columns: 1fr;
+    }
+    
+    .video-item {
+      height: 250px;
+    }
+    
+    .album-title {
+      font-size: 2rem;
+    }
+    
+    .header-bar {
+      padding: 1rem;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .user-info {
+      width: 100%;
+      justify-content:center ;
+    }
+  }
+</style>
+</head>
+<body>
+  
+<!-- Página do Álbum -->
+<div class="album-page" id="albumPage">
+  <div class="header-bar">
+    <h1 class="t1">Álbum da Apresentação</h1>
+    <p class="t2"><span>Bem-vindo, <span id="currentUser">Convidado</span></span> </p> 
+    
+    <div class="user-info">
+      <div id="menu" class="menu-hidden">
+        <button class="menu-option" onclick="mostrarFotos()">Apenas Fotos</button>
+        <button class="menu-option" onclick="mostrarVideos()">Apenas Vídeos</button>
+        <button class="menu-option" onclick="mostrarTudo()">Mostrar Tudo</button>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="album-content">
+    <h2 class="album-title">Nossas Memórias</h2>
+    <p class="album-subtitle">Memórias especiais em forma de vídeo e fotos</p>
+
+    <!-- ==================== -->
+    <!-- 🖼️ SECÇÃO DAS FOTOS -->
+    <!-- ==================== -->
+    <div id="fotosSection">
+      <div class="family-album" id="fotos">
+        <!-- Fotos 1-90 -->
+        <div class="photo-card antiga">
+          <img src="./img/1.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+           
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/2.jpg" alt="">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/3.jpg" alt="">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/4.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/5.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/6.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+          
+        <div class="photo-card antiga">
+          <img src="./img/7.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/8.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/9.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/10.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        
+        <div class="photo-card antiga">
+        <img src="./img/11.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/12.jpg" alt="">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/13.jpg" alt="">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/14.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/15.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/16.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+          
+        <div class="photo-card antiga">
+          <img src="./img/17.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/18.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/19.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/20.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        
+        <div class="photo-card antiga">
+        <img src="./img/21.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/22.jpg" alt="">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/23.jpg" alt="">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/24.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+             
+        <div class="photo-card antiga">
+          <img src="./img/25.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/26.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+          
+        <div class="photo-card antiga">
+          <img src="./img/27.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/28.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/29.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/30.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+  
+        <div class="photo-card antiga">      
+        <img src="./img/31.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/32.jpg" alt="">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/33.jpg" alt="">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/34.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/35.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/36.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+          
+        <div class="photo-card antiga">
+          <img src="./img/37.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/38.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/39.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/40.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+       
+        <div class="photo-card antiga"> <img src="./img/41.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/42.jpg" alt="">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/43.jpg" alt="">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/44.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+            <h3>Ariana e Aricleny - 2025</h3>
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/45.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/46.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+          
+        <div class="photo-card antiga">
+          <img src="./img/47.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/48.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/49.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/50.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        
+        <div class="photo-card antiga"><img src="./img/51.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/52.jpg" alt="">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/53.jpg" alt="">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/54.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/55.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/56.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+          
+        <div class="photo-card antiga">
+          <img src="./img/57.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/58.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/59.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/60.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+       
+        <div class="photo-card antiga"> <img src="./img/61.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/62.jpg" alt="">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/63.jpg" alt="">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/64.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/65.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/66.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+          
+        <div class="photo-card antiga">
+          <img src="./img/67.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/68.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/69.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/70.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+      
+        <div class="photo-card antiga">  <img src="./img/71.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/72.jpg" alt="">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/73.jpg" alt="">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/74.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+            <h3>Ariana e Aricleny - 2025</h3>
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/75.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/76.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+          
+        <div class="photo-card antiga">
+          <img src="./img/77.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/78.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/79.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/80.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+      
+        <div class="photo-card antiga">  <img src="./img/81.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/82.jpg" alt="">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/83.jpg" alt="">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/84.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/85.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>
+      
+        <div class="photo-card antiga">
+          <img src="./img/86.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+          
+        <div class="photo-card antiga">
+          <img src="./img/87.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+         </div>
+        </div>
+        <div class="photo-card antiga">
+          <img src="./img/88.jpg" alt="Ariana - 2025">
+          <div class="photo-info">
+          </div>
+        </div>
+        
+        <div class="photo-card antiga">
+          <img src="./img/89.jpg" alt="Vovó e Vovô">
+          <div class="photo-info">
+            
+           </div>
+        </div>             
+      </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- 📹 SECÇÃO DOS VÍDEOS -->
+    <!-- ===================== -->
+    <div id="videosSection" class="video-section">
+      <div class="video-gallery" id="videoGallery">
+        <!-- Vídeo 1 -->
+        <div class="video-item">
+          <video controls>
+            <source src="./video/v1.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+          </video>
+        </div>
+        
+        <!-- Vídeo 2 -->
+        <div class="video-item">
+          <video controls>
+            <source src="./video/v2.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+          </video>
+        </div>
+        
+        <!-- Vídeo 3 -->
+        <div class="video-item">
+          <video controls>
+            <source src="./video/v3.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+          </video>
+        </div>
+        
+        <!-- Vídeo 4 -->
+        <div class="video-item">
+          <video controls>
+            <source src="./video/v4.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+          </video>
+        </div>
+        
+        <!-- Vídeo 5 -->
+        <div class="video-item">
+          <video controls>
+            <source src="./video/v5.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+          </video>
+        </div>
+        
+        <!-- Vídeo 6 -->
+        <div class="video-item">
+          <video controls>
+            <source src="./video/v6.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+          </video>
+        </div>
+        
+        <!-- Vídeo 7 -->
+        <div class="video-item">
+          <video controls>
+            <source src="./video/v7.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+          </video>
+        </div>
+        
+        <!-- Vídeo 8 -->
+        <div class="video-item">
+          <video controls>
+            <source src="./video/v8.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+          </video>
+        </div>
+        
+        <!-- Vídeo 9 -->
+        <div class="video-item">
+          <video controls>
+            <source src="./video/v9.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+          </video>
+        </div>
+        
+        <!-- Vídeo 10 -->
+        <div class="video-item">
+          <video controls>
+            <source src="./video/v10.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+          </video>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+  <footer style="color:gray;text-align:center">
+    © 2025 Apresentação.Todos os direitos restritos.   
+  </footer>
+<!-- Modal para Zoom -->
+<div id="zoomModal" class="zoom-modal">
+  <span class="zoom-close" onclick="fecharZoom()">&times;</span>
+  <img class="zoom-image" id="fullscreenImage">
+  <div class="zoom-info">
+    <h3 id="zoomTitle"></h3>
+    <p id="zoomDescription"></p>
+  </div>
+</div>
+
+<script>
+  // ===== INICIALIZAÇÃO =====
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mostra as fotos por padrão
+    mostrarFotos();
+    
+    // Inicializa o zoom nas imagens
+    inicializarAlbum();
+    
+    // Fecha o menu se clicar fora
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('menu');
+      const menuButton = document.querySelector('.menu-btn');
+      
+      if (!menu.contains(e.target) && e.target !== menuButton) {
+        menu.classList.add('menu-hidden');
+      }
+    });
+  });
+
+  // ===== FUNÇÕES DO MENU =====
+  function toggleMenu() {
+    const menu = document.getElementById('menu');
+    menu.classList.toggle('menu-hidden');
+  }
+
+  function mostrarFotos() {
+    document.getElementById('videosSection').style.display = 'none';
+    document.getElementById('fotosSection').style.display = 'block';
+    document.getElementById('menu').classList.add('menu-hidden');
+  }
+
+  function mostrarVideos() {
+    document.getElementById('fotosSection').style.display = 'none';
+    document.getElementById('videosSection').style.display = 'block';
+    document.getElementById('menu').classList.add('menu-hidden');
+  }
+
+  function mostrarTudo() {
+    document.getElementById('fotosSection').style.display = 'block';
+    document.getElementById('videosSection').style.display = 'block';
+    document.getElementById('menu').classList.add('menu-hidden');
+  }
+
+  function recarregar() {
+    location.reload();
+  }
+
+  // ===== FUNÇÕES DE ZOOM =====
+  function inicializarAlbum() {
+    const imagens = document.querySelectorAll('.photo-card img');
+    
+    imagens.forEach(imagem => {
+      imagem.addEventListener('click', abrirZoom);
+      imagem.style.cursor = 'zoom-in';
+      imagem.title = 'Clique para ampliar';
+    });
+  }
+
+  function abrirZoom(event) {
+    const imagemClicada = event.target;
+    const card = imagemClicada.closest('.photo-card');
+    const titulo = card.querySelector('h3')?.textContent || 'Sem título';
+    const descricao = card.querySelector('p')?.textContent || '';
+    
+    const modal = document.getElementById('zoomModal');
+    const imagemZoom = document.getElementById('fullscreenImage');
+    const tituloZoom = document.getElementById('zoomTitle');
+    const descricaoZoom = document.getElementById('zoomDescription');
+    
+    imagemZoom.src = imagemClicada.src;
+    imagemZoom.alt = imagemClicada.alt;
+    tituloZoom.textContent = titulo;
+    descricaoZoom.textContent = descricao;
+    
+    imagemZoom.classList.add('zoom-animate');
+    modal.style.display = 'block';
+    
+    // Impede que o evento se propague
+    event.stopPropagation();
+    
+    // Remove a animação após ela terminar
+    setTimeout(() => {
+      imagemZoom.classList.remove('zoom-animate');
+    }, 400);
+  }
+
+  function fecharZoom() {
+    document.getElementById('zoomModal').style.display = 'none';
+  }
+
+  // ===== EVENT LISTENERS GLOBAIS =====
+  document.getElementById('zoomModal').addEventListener('click', function(event) {
+    if (event.target === this || event.target.classList.contains('zoom-close')) {
+      fecharZoom();
+    }
+  });
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      fecharZoom();
+    }
+  });
+</script>
+
+</body>
+</html>
+
+     
